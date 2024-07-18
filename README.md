@@ -18,3 +18,7 @@ I have managed to get an old version of the software (v1.0) which i could assemb
 
 However, i have added the version 1.0 and 2.0 as binary files which can directly been used by everyone interested. Also i have added a short manual for the DiskWorks version 2.0. You should use the v2.0 as it is definitly more powerfull and mature. v1.0 just to have it complete.
 If you think, you would like to develop a version 3 of DiskWorks, just let me know. Maybe we can get our activities coordinated.
+
+DWPUB_V1 is the binary of version 1 of DiskWorks
+DW is the binary of version 2
+

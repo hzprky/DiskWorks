@@ -17,3 +17,4 @@ Unfortunately most parts of my source codes are gone. My Sharp PC-1600 has been 
 I have managed to get an old version of the software (v1.0) which i could assemble until the end. Unfortunately the assembling process hang in the end so that i do not know, if it was really successfull or not 100% completed. I will try to continue developing it further but first need to understand my own code. After 30 years my knowledge has disappeared to /dev/nul also.
 
 However, i have added the version 1.0 and 2.0 as binary files which can directly been used by everyone interested. Also i have added a short manual for the DiskWorks version 2.0. You should use the v2.0 as it is definitly more powerfull and mature. v1.0 just to have it complete.
+If you think, you would like to develop a version 3 of DiskWorks, just let me know. Maybe we can get our activities coordinated.

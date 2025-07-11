@@ -1,0 +1,82 @@
+#!/bin/bash
+
+# Dateinamen
+SRCFILE="dwx.asm"
+BINFILE="dwx.bin"
+OUTFILE="DWX.BIN"
+CNFFILE="DW.CFG"
+# adapt to anybodies need
+USB_MOUNTPOINT="/media/xian/S3"
+
+# Assemblierung starten
+echo "-----------------------------------------"
+echo "Starting to assemble the file $SRCFILE..."
+echo "-----------------------------------------"
+if zasm --z80 -u -b -w "$SRCFILE"; then
+    echo "------------------------------------"
+    echo "Assembling completed without errors."
+    echo "------------------------------------"
+
+    # Prüfen, ob die Binärdatei existiert
+    if [[ ! -f "$BINFILE" ]]; then
+        echo "-------------------------------------------------------------"
+        echo "Error: File '$BINFILE' was not created! See assemly error log"
+        echo "-------------------------------------------------------------"
+        exit 2
+    fi
+
+    # Datei umbenennen (kopieren unter neuem Namen)
+    cp -v "$BINFILE" "$OUTFILE"
+
+    # Auf USB-Stick warten
+    echo "----------------------------------------------------"
+    echo "Waiting on USB Pen-Drive under  '$USB_MOUNTPOINT'..."
+    echo "----------------------------------------------------"
+    while [[ ! -d "$USB_MOUNTPOINT" ]]; do
+        sleep 1
+    done
+
+    echo "--------------------------------------------------------"
+    echo "USB-Pen-Drive recognised. Now trying to copy the file..."
+    echo "--------------------------------------------------------"
+    if cp -v "$OUTFILE" "$USB_MOUNTPOINT/$OUTFILE"; then
+            cp -v "$CNFFILE" "$USB_MOUNTPOINT"      # to be safe...
+            echo "----------------------------------------------"
+            echo "File successfully copied to the USB-Pen-Drive."
+            echo "----------------------------------------------"
+
+        # Gerätepfad zum Mountpoint ermitteln
+        DEV=$(findmnt -n -o SOURCE --target "$USB_MOUNTPOINT")
+
+        if [[ -n "$DEV" ]]; then
+            echo "--------------------------------------"
+            echo "Try to unmount the USB Pen-Drive: $DEV"
+            echo "--------------------------------------"
+            sleep 2
+            if udisksctl unmount --block-device "$DEV"; then
+                echo "-------------------------------------"
+                echo "USB-Pen-Drive successfully unmounted."
+                echo "-------------------------------------"
+            else
+                echo "-----------------------------------------"
+                echo "Warning: Unmount with 'udisksctl' failed."
+                echo "-----------------------------------------"
+            fi
+        else
+            echo "------------------------------------------"
+            echo "Device for mount point could not be found."
+            echo "------------------------------------------"
+        fi
+
+    else
+        echo "--------------------------------------------------"
+        echo "Error while copying the file to the USB-Pen-Drive!"
+        echo "--------------------------------------------------"
+        exit 4
+    fi
+else
+    echo "--------------------------------------"
+    echo "Error during assembling of '$SRCFILE'."
+    echo "--------------------------------------"
+    exit 1
+fi
